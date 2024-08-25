@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "800124498704",
+    "project_id": "educational-game-8a52e",
+    "storage_bucket": "educational-game-8a52e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800124498704:android:4c934f2fca48a9bea26b95",
+        "android_client_info": {
+          "package_name": "com.example.educational_quiz_game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6z4hRGA68nSYrTDwoWr2ZGMT55-WWW6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
