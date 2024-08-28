@@ -1,3 +1,5 @@
+import 'package:educational_quiz_game/core/functions/navigations.dart';
+import 'package:educational_quiz_game/features/home/views/pages/options_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,8 +40,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                     (category) => InkWell(
                       onTap: () {
                         // show bottom message to pick single player or multiplayer
-                        
-
+                        navigateAndBack(context, OptionsPage(subject: category['name']!));
                       },
                       child: Card(
                         color: Colors.white,

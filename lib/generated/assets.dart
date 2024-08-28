@@ -11,6 +11,7 @@ class Assets {
   static const String imagesEqSplash = 'assets/images/eq_splash.png';
   static const String imagesHistory = 'assets/images/history.png';
   static const String imagesMath = 'assets/images/math.png';
+  static const String imagesQuiz = 'assets/images/quiz.png';
   static const String imagesRiddles = 'assets/images/riddles.png';
   static const String imagesScience = 'assets/images/science.png';
 

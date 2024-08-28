@@ -21,7 +21,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     var user = ref.watch(userProvider);
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
