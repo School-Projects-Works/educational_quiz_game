@@ -1,9 +1,12 @@
 import 'package:educational_quiz_game/core/widgets/custom_button.dart';
+import 'package:educational_quiz_game/core/widgets/custom_dialog.dart';
 import 'package:educational_quiz_game/core/widgets/custom_drop_down.dart';
 import 'package:educational_quiz_game/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../generated/assets.dart';
+import '../../provider/home_provider.dart';
+import 'player_selection.dart';
 
 class OptionsPage extends ConsumerStatefulWidget {
   const OptionsPage({super.key, required this.subject});
@@ -17,6 +20,8 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
   @override
   Widget build(BuildContext context) {
     var style = CustomTextStyles();
+    var level = ref.watch(difficultyLevelProvider);
+    var size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
@@ -47,6 +52,7 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
                 //select difficulty level
                 CustomDropDown(
                     label: 'Select Difficulty Level',
+                    value: level,
                     items: [
                       'Easy',
                       'Medium',
@@ -58,7 +64,8 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      // set the difficulty level
+                      ref.read(difficultyLevelProvider.notifier).state =
+                          value.toString();
                     }),
                 const SizedBox(height: 20),
                 CustomButton(
@@ -66,13 +73,32 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
                     color: Colors.blueGrey,
                     onPressed: () {
                       // navigate to the quiz page
+                      if (level.isNotEmpty) {
+                        //Todo go to the quiz page
+                        //?set timer on the quiz page to the selected difficulty level
+                      } else {
+                        CustomDialogs.toast(
+                            message: 'Please select a difficulty level');
+                      }
                     }),
                 const SizedBox(height: 20),
                 CustomButton(
                     text: 'Find a Player',
                     color: Colors.green,
                     onPressed: () {
-                      // navigate to the multiplayer page
+                      //show a modal bottom sheet with a list of players
+                      showModalBottomSheet(
+                          context: context,
+                          isDismissible: false,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)),
+                          ),
+                          builder: (context) {
+                            return const PlayerSelection();
+                          });
                     }),
               ],
             ),

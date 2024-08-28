@@ -100,5 +100,16 @@ class UserServices {
     }
   }
 
+  static Stream<List<UserModel>> getUsers() {
+    try {
+      return users.snapshots().map((event) => event.docs.map((e) => UserModel.fromMap(e.data() as Map<String,dynamic>)).toList());
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return const Stream.empty();
+    }
+  }
+
   
 }

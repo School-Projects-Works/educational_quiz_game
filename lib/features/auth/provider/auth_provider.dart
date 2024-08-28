@@ -85,3 +85,19 @@ final userFuture = FutureProvider<UserModel?>((ref) async {
   }
   return user;
 });
+
+
+final userQueryStringProvider = StateProvider<String>((ref) => '');
+
+final usersStreamProvider = StreamProvider.autoDispose<List<UserModel>>((ref) async* {
+  var query = ref.watch(userQueryStringProvider);
+  var users =  UserServices.getUsers();
+  await for (var user in users) {
+    if(user.isNotEmpty){
+      var me = ref.watch(userProvider);
+      //remove the current user from the list
+      user.removeWhere((element) => element.id == me.id);
+      yield user.where((element) => element.userName.toLowerCase().contains(query.toLowerCase())||element.email.contains(query.toLowerCase())).toList();
+    }
+  }
+});
