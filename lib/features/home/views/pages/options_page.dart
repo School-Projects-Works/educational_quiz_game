@@ -1,12 +1,14 @@
+import 'package:educational_quiz_game/core/functions/navigations.dart';
 import 'package:educational_quiz_game/core/widgets/custom_button.dart';
 import 'package:educational_quiz_game/core/widgets/custom_dialog.dart';
 import 'package:educational_quiz_game/core/widgets/custom_drop_down.dart';
+import 'package:educational_quiz_game/features/home/views/pages/questions_page.dart';
 import 'package:educational_quiz_game/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../generated/assets.dart';
 import '../../provider/home_provider.dart';
-import 'player_selection.dart';
+
 
 class OptionsPage extends ConsumerStatefulWidget {
   const OptionsPage({super.key, required this.subject});
@@ -21,7 +23,6 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
   Widget build(BuildContext context) {
     var style = CustomTextStyles();
     var level = ref.watch(difficultyLevelProvider);
-    var size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
@@ -69,13 +70,15 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
                     }),
                 const SizedBox(height: 20),
                 CustomButton(
-                    text: 'Start Playing',
+                    text: 'Play Alone',
                     color: Colors.blueGrey,
                     onPressed: () {
                       // navigate to the quiz page
                       if (level.isNotEmpty) {
-                        //Todo go to the quiz page
-                        //?set timer on the quiz page to the selected difficulty level
+                        navigateAndBack(
+                            context,
+                            QuestionsPage(
+                                subject: widget.subject, level: level));
                       } else {
                         CustomDialogs.toast(
                             message: 'Please select a difficulty level');
@@ -83,23 +86,10 @@ class _OptionsPageState extends ConsumerState<OptionsPage> {
                     }),
                 const SizedBox(height: 20),
                 CustomButton(
-                    text: 'Find a Player',
-                    color: Colors.green,
-                    onPressed: () {
-                      //show a modal bottom sheet with a list of players
-                      showModalBottomSheet(
-                          context: context,
-                          isDismissible: false,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
-                          ),
-                          builder: (context) {
-                            return const PlayerSelection();
-                          });
-                    }),
+                    text: 'Create Room', color: Colors.green, onPressed: () {}),
+                const SizedBox(height: 20),
+                CustomButton(
+                    text: 'Join a Room', color: Colors.blue, onPressed: () {}),
               ],
             ),
           ),

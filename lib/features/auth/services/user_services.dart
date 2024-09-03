@@ -111,5 +111,18 @@ class UserServices {
     }
   }
 
+  static Future<bool> updateUser({required UserModel user})async {
+    try {
+      await users.doc(user.id).update(user.toMap());
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return false;
+    }
+
+  }
+
   
 }

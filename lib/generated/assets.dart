@@ -14,5 +14,7 @@ class Assets {
   static const String imagesQuiz = 'assets/images/quiz.png';
   static const String imagesRiddles = 'assets/images/riddles.png';
   static const String imagesScience = 'assets/images/science.png';
+  static const String imageLose = 'assets/images/lose_image.png';
+  static const String imageWinner = 'assets/images/winner_image.png';
 
 }

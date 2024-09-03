@@ -3,6 +3,8 @@ import 'package:educational_quiz_game/core/functions/navigations.dart';
 import 'package:educational_quiz_game/core/widgets/custom_dialog.dart';
 import 'package:educational_quiz_game/features/auth/data/user_model.dart';
 import 'package:educational_quiz_game/features/auth/views/login.dart';
+import 'package:educational_quiz_game/features/home/questions/data/question_model.dart';
+import 'package:educational_quiz_game/features/home/questions/services/questions_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,10 +73,21 @@ class UserProvider extends StateNotifier<UserModel> {
     }
   }
 
-  void signOut() {}
+  void signOut() async{}
+
+  void updateUserStatus(String s)async {
+    state = state.copyWith(isOnline: s == 'online');
+    await UserServices.updateUser(user: state);
+  }
 }
 
 final userFuture = FutureProvider<UserModel?>((ref) async {
+  // var questions= QuestionModel.sampleQuestions;
+  // for (var question in questions) {
+  //   var id = QuestionsServices.questionId();
+  //   question = question.copyWith(id: id);
+  //   await QuestionsServices.createQuestion(question: question);
+  // }
   var id = await LocalStorage.getData(key: 'userId');
   if(id == null){
     return null;

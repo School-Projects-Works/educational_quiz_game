@@ -1,4 +1,5 @@
 import 'package:educational_quiz_game/features/auth/provider/auth_provider.dart';
+import 'package:educational_quiz_game/features/home/questions/provider/questions_provider.dart';
 import 'package:educational_quiz_game/features/home/views/category_page.dart';
 import 'package:educational_quiz_game/features/home/views/history_page.dart';
 import 'package:educational_quiz_game/features/home/views/profile_page.dart';
@@ -7,7 +8,6 @@ import 'package:educational_quiz_game/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../provider/home_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -17,10 +17,38 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomePageState extends ConsumerState<HomePage>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      //update user status
+      ref.read(userProvider.notifier).updateUserStatus('online');
+    } else if (state == AppLifecycleState.paused) {
+      //update user status
+      ref.read(userProvider.notifier).updateUserStatus('offline');
+    }else if (state == AppLifecycleState.detached) {
+      //update user status
+      ref.read(userProvider.notifier).updateUserStatus('offline');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = ref.watch(userProvider);
+    var questionsStreamProvider = ref.watch(questionsStream);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -86,18 +114,29 @@ class _HomePageState extends ConsumerState<HomePage> {
                 label: 'Profile',
               ),
             ]),
-        body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: () {
-              if (ref.watch(homeNavProvider) == 0) {
-                return const CategoryPage();
-              } else if (ref.watch(homeNavProvider) == 1) {
-                return const HistoryPage();
-              } else {
-                return ProfilePage();
-              }
-            }()),
+        body:questionsStreamProvider.when(
+          data: (questions) {
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: () {
+                if (ref.watch(homeNavProvider) == 0) {
+                  return const CategoryPage();
+                } else if (ref.watch(homeNavProvider) == 1) {
+                  return const HistoryPage();
+                } else {
+                  return const ProfilePage();
+                }
+              }(),
+            );
+          },
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, stack) => Center(
+            child: Text('Error: $error'),
+          ),
+         
       ),
-    );
+    ));
   }
 }
